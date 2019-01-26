@@ -1,8 +1,7 @@
 *.o
-a.out
+*.out
 *~
 *.py[co]
-
 
 exercises/ex05/data
 exercises/ex09/fork

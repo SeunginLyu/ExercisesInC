@@ -36,7 +36,7 @@
         {
             "label": "exec",
             "type": "shell",
-            "command": "cd ${fileDirname} && ./${fileBasenameNoExtension}",
+            "command": "cd ${fileDirname} && ./${fileBasenameNoExtension}.out",
             "group":{
                 "kind": "test",
                 "isDefault": true

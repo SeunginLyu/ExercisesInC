@@ -4,10 +4,8 @@
  * which goes up by 1 if card value is between 3~6(inclusive)
  * and goes down by 1 if cald value is 10, J, Q, or K 
 */
-
 #include <stdio.h>
 #include <stdlib.h>
-
 /* Prompts the user for input and puts the reply in the given buffer.
 
        User input is truncated to the first two characters.
@@ -19,7 +17,6 @@ void get_card_name(char *prompt, char *card_name){
     puts(prompt);
     scanf("%2s", card_name);
 }
-
 /* Returns the integer value for given card_name input.
     Prints error if given unknown card_name
 

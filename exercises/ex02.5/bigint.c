@@ -33,8 +33,23 @@ s: string
 returns: string
 */
 char *reverse_string(char *s) {
-    //TODO: Fill this in.
-    return "";
+    // allocate str in heap and copy s to str
+    char* str = (char*) malloc(strlen(s) *sizeof(char));
+    strcpy(str, s);
+    // allocate head and tail pointers to reverse string
+    char* head;
+    char* tail;
+    char tmp;
+    head = str;
+    tail = head + strlen(str) - 1;
+    while (head < tail) {
+        tmp = *head;
+        *head = *tail;
+        *tail = tmp;
+        head++;
+        tail--;
+    }
+    return str;
 }
 
 /* ctoi: Converts a character to integer.

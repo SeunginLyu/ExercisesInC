@@ -2,7 +2,7 @@
 *.out
 *~
 *.py[co]
-
+*.dSYM
 exercises/ex05/data
 exercises/ex09/fork
 exercises/ex12/counter

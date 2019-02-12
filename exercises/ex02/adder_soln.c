@@ -12,8 +12,8 @@ License: GNU GPLv3
 #define ARRAY_SIZE 10
 #define BUFFER_SIZE 20
 
-int end_of_file = 0;
-int bad_input = 0;
+// int end_of_file = 0;
+// int bad_input = 0;
 
 /* add_array: Adds up the elements of an array.
 *
@@ -36,59 +36,65 @@ int add_array(int array[], int n) {
 *
 *   returns: integer
 */
-int read_integer() {
+
+// Exercise: improve the interface of read_integer.
+
+// 1) Take a pointer as an argument.
+// 2) Store the result at the pointee of the pointer.
+// 3) Return 0 for success and -1 otherwise (or different error codes for different errors).
+// 4) Optional challenge: replace atoi with strtol so the user can enter 0.  See the strtol man page.
+int read_integer(int *number_ptr) {
     char *res;
     char buffer[BUFFER_SIZE];
-    int number;
+    char *end;
 
     // read a string
     res = fgets(buffer, sizeof(buffer), stdin);
     if (res == NULL) {
-        end_of_file = 1;
-        return 0;
+        // end_of_file = 1;
+        return -1;
     }
 
     // check if the length of the string it too long
     if (strlen(buffer) == BUFFER_SIZE) {
-        bad_input = 1;
-        return 0;
+        // bad_input = 1;
+        return -2;
     }
 
     //printf("%s, %d\n", buffer, (int)strlen(buffer));
 
     // convert to integer
-    number = atoi(buffer);
-
+    *number_ptr = strtol(buffer, &end ,10);
     // check for invalid input.  Notice that atoi returns 0
     // for invalid input, so we can't allow the used to enter 0.
-    if (number == 0) {
-        bad_input = 1;
-        return 0;
+    if (*number_ptr == 0) {
+        // bad_input = 1;
+        return -2;
     }
-    return number;
+    return 0; // means success 
 }
 
 int main()
 {
     int i;
-    int res;
+    int number;
     int array[ARRAY_SIZE];
 
     for (i=0; i<ARRAY_SIZE; i++) {
-        int res = read_integer();
+        int res = read_integer(&number);
         //printf("%d\n", res);
 
-        if (end_of_file) {
+        if (res == -1) {
             int total = add_array(array, i);
             printf("total %d\n", total);
             return 0;
         }
 
-        if (bad_input) {
+        if (res == -2) {
             printf("Invalid input.\n");
             return -1;
         }
-        array[i] = res;
+        array[i] = number;
     }
 
     // if we get to the end of the loop, the user entered

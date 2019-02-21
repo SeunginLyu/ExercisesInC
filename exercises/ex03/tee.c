@@ -22,10 +22,10 @@ void close_files(FILE* file[MAX_FILECOUNT], char f[MAX_FILECOUNT][MAX_FILENAME],
         fclose(file[i]);
     }
 }
-int arg_parse(int* argc, char* argv[]){
+int arg_parse(int argc, char* argv[]){
     // parse arguments
     char ch;
-    while((ch = getopt(*argc, argv, "ap")) != EOF){
+    while((ch = getopt(argc, argv, "ap")) != EOF){
         switch (ch){
             case 'a':
                 A_FLAG = 1;
@@ -38,8 +38,6 @@ int arg_parse(int* argc, char* argv[]){
                 return 1;
         }
     }
-    (*argc) -=optind;
-    argv += optind;
     if(argv[0] == NULL){
         fprintf(stderr, "Error: At least one file required\n");
         return 1;
@@ -47,26 +45,28 @@ int arg_parse(int* argc, char* argv[]){
     return 0;
 }
 int copy_filename(char* argv[], char file_name[MAX_FILECOUNT][MAX_FILENAME], int* file_count){
-    while(argv[(*file_count)+1] != NULL && *file_count < MAX_FILECOUNT){
+    while(argv[*file_count] != NULL && *file_count < MAX_FILECOUNT){
         // if file name exceeds MAX_FILENAME characters then error else copy to f
-        if(strlen(argv[(*file_count)+1]) > MAX_FILENAME){
+        if(strlen(argv[*file_count]) > MAX_FILENAME){
             fprintf(stderr, "Error: The max character number for file names is 255");
             return 1;
         }
         else{
-            strcpy(file_name[*file_count], argv[(*file_count)+1]);
+            strcpy(file_name[*file_count], argv[*file_count]);
         }
         (*file_count)++;
     }
     return 0;
 }
 int main(int argc, char *argv[]){
-    int file_count = 1;
-    int* argc_p = &argc;
+    int file_count = 0;
     char file_name[MAX_FILECOUNT][MAX_FILENAME];
     FILE* file[MAX_FILECOUNT];
-    if(arg_parse(argc_p, argv)){
+    if(arg_parse(argc, argv)){
         return 1;
+    }else{
+        argc -=optind;
+        argv += optind;
     }
     if(copy_filename(argv, file_name, &file_count)){
         return 1;

@@ -102,3 +102,46 @@ int main(int argc, char *argv[]){
     close_files(file, file_name, file_count);
     return 0;
 }
+
+/* 
+Reflection
+----------------------------------------------------------------------------------------
+Question 3.
+I first began by thinking about the different components I need to build tee, which were
+1) Argument parser for flags and file names
+2) A way to process store file names for opening files and closing files.
+3) A function to process stdin and copy to stdout and write to files.
+Then I first ended up writing a huge main function that contained all the components,
+so I refactored them into several functions. Refactorting defeintely did slow me down a little because
+now I had to pass pointers to the new functions and I inevitably made mistakes and spent time debugging
+when I began to use more pointers. However, I like the refactored version 
+because I can easily comprehend what's going on in this program 
+just by looking at the function calls in the main function. 
+Thinking about error handling slowed me down a little, 
+and I ended up not handling some errors (like file opens) assuming all files would be valid.
+Next time, I would like to start by writing out the interfaces of each function so that I don't spend
+extra time trying to refactor them, or at least minimize the time taken into refactoring.
+----------------------------------------------------------------------------------------
+Question 4.
+I looked at the professional version, and here are the major differences I found.
+
+1. Header declaration
+    void	add __P((int, char *));
+    int	main __P((int, char **));
+2. The usage of "pipes" -> Open, Read, Write, Warn (#include <unistd.h>)
+    instead of using fgets, fprintf
+    I guess this is the reason why I could not get the results from 
+    ping google.com | ./tee.out ping.txt
+    because without establishing the pipes I won't get stdin if I interrupt it?
+    (but it works with a -i flag on mine as well, but the original tee works without the -i flag)
+3. The usage of linked list(struct) to represent pipes(I think is super cool) 
+    instead of using a counter variable for files
+4. Dynamic memory allocation for buffers
+    instead of defining a maximum buffer length
+5. (void)signal(SIGINT, SIG_IGN) for ignoring the interrupt
+    instead of 
+        if (signal(SIGINT, SIG_IGN) != SIG_IGN){
+            signal(SIGINT, ignore);
+        }
+----------------------------------------------------------------------------------------
+*/

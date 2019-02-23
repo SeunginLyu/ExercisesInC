@@ -20,6 +20,7 @@
 #include <syslog.h>
 #include <strings.h>
 
+
 #define MAXLINE 4096
 #define BUFSIZE 1500
 
@@ -62,4 +63,32 @@ ssize_t Recvfrom(int fd, void *ptr, size_t nbytes, int flags,
 void err_sys (char *fmt, ...);
 void err_quit (char *fmt, ...);
 
-
+// from main
+void loop_ttl ();
+void send_dgram (int ttl);
+void print_report ();
+double time_to_double (Timeval *time);
+void sub_tv (Timeval *plus, Timeval *minus, Timeval *res);
+int recv_dgram ();
+int process_ip (struct ip *ip, int len);
+void sig_alrm (int signo);
+int send_probes (int ttl);
+char recvbuf[BUFSIZE];
+char sendbuf[BUFSIZE];
+Rec *rec;
+int sendfd, recvfd;
+int pipefd[2];
+Sockaddr *sasend;    /* socket addresses for various purposes */
+Sockaddr *sarecv;
+Sockaddr *salast;
+Sockaddr *sabind;
+socklen_t salen;                    /* length of a socket address */
+u_short sport;                      /* source UDP port # */
+u_short dport;
+Timeval sendtv[1];
+Timeval recvtv[1];
+Timeval difftv[1];
+int max_ttl;
+int nprobes;
+int seq;
+int datalen;

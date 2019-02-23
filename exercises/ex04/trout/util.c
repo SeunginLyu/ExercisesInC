@@ -153,7 +153,7 @@ Sigfunc *signal(int signo, Sigfunc *func)
   sigemptyset(&act.sa_mask);
   act.sa_flags = 0;
   if (signo == SIGALRM) {
-    act.sa_flags |= 0;     /* SunOS 4.x (and Linux, apparently) */
+    act.sa_flags |= 1;     /* SunOS 4.x (and Linux, apparently) */
   }
   if (sigaction(signo, &act, &oact) < 0)
     return(SIG_ERR);

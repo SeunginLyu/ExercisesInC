@@ -1,6 +1,6 @@
-#include "trout.h"
+#include "util.h"
 
-void err_doit (int errnoflag, int level, char *fmt, va_list ap)
+void err_doit (int errnoflag, char *fmt, va_list ap)
 {
   int errno_save, n;
   char buf[MAXLINE];
@@ -21,7 +21,7 @@ void err_sys (char *fmt, ...)
 {
   va_list ap;
   va_start (ap, fmt);
-  err_doit (1, LOG_ERR, fmt, ap);
+  err_doit (1, fmt, ap);
   va_end(ap);
   exit(1);
 }
@@ -30,7 +30,7 @@ void err_quit (char *fmt, ...)
 {
   va_list ap;
   va_start (ap, fmt);
-  err_doit (0, LOG_ERR, fmt, ap);
+  err_doit (0, fmt, ap);
   va_end(ap);
   exit(1);
 }
@@ -79,7 +79,7 @@ char *Sock_ntop_host(const struct sockaddr *sa, socklen_t salen)
   return(ptr);
 }
 
-void sock_set_port(struct sockaddr *sa, socklen_t salen, int port)
+void sock_set_port(struct sockaddr *sa, int port)
 {
   switch (sa->sa_family) {
     case AF_INET: {
@@ -92,8 +92,7 @@ void sock_set_port(struct sockaddr *sa, socklen_t salen, int port)
   }
 }
 
-int sock_cmp_addr(const struct sockaddr *sa1, const struct sockaddr *sa2,
-		  socklen_t salen)
+int sock_cmp_addr(const struct sockaddr *sa1, const struct sockaddr *sa2)
 {
   if (sa1->sa_family != sa2->sa_family)
     return(-1);
@@ -271,7 +270,7 @@ ssize_t Read(int fd, void *ptr, size_t nbytes)
 
 void Write(int fd, void *ptr, size_t nbytes)
 {
-  if (write(fd, ptr, nbytes) != nbytes)
+  if (write(fd, ptr, nbytes) != ((long) nbytes))
     err_sys("write error");
 }
 

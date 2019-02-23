@@ -12,7 +12,7 @@
 /* sig_alrm: alarm handler sends a message to the process through
    a pipe, causing select to return */
 
-void sig_alrm (int signo)
+void sig_alrm ()
 {
   Write (pipefd[1], "", 1);  /* write 1 null byte to pipe */
   return;
@@ -208,7 +208,7 @@ void print_report ()
        ICMP_DEST_UNREACH error.  The second attempt seems
        to succeed consistently. */
 
-void send_dgram (int ttl)
+void send_dgram ()
 {
   int n;
 

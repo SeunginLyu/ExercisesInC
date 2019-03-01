@@ -23,10 +23,10 @@ char *strfilter2(char *string, char *letters) {
     char *dest = buffer;
     char c;
 
-    while (c = *string++) {
+    while ((c = *(string++))) {
         char *ptr = strchr(letters, c);
         if (ptr) {
-            *dest++ = c;
+            *(dest++) = c;
         }
     }
     *dest = '\0';
@@ -46,22 +46,25 @@ char *strfilter3(char *string, char *letters) {
             buffer[j++] = string[i];
         }
     }
-    return buffer;
+    return strdup(buffer);
 }
 
 char *strfilter4(char *string, char *letters) {
     char buffer[100];
     char c;
-
-    while (c = *string++) {
+    int i=0;
+    while ((c = *(string++))) {
         char *ptr = strchr(letters, c);
         if (ptr) {
-            strcat(buffer, c);
+            // both arguments must be strings
+            buffer[i++] = c;
         }
     }
+    buffer[i] = '\0';
     int length = sizeof(buffer);
     char *res = (char *) malloc (length * sizeof(char));
-    strcpy(buffer, res);
+    // all string function have destination first
+    strcpy(res, buffer);
     return res;
 }
 

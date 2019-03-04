@@ -37,7 +37,7 @@ char *strfilter2(char *string, char *letters) {
 
 char *strfilter3(char *string, char *letters) {
     int length = strlen(string);
-    char buffer[length];
+    char buffer[length+1];
     int j = 0;
 
     for (int i=0; i<length; i++) {
@@ -60,9 +60,8 @@ char *strfilter4(char *string, char *letters) {
             buffer[i++] = c;
         }
     }
-    buffer[i] = '\0';
-    int length = sizeof(buffer);
-    char *res = (char *) malloc (length * sizeof(char));
+    int length = strlen(buffer);
+    char *res = (char *) malloc ((length+1) * sizeof(char)); // gotta allocate extra sapce for null terminator
     // all string function have destination first
     strcpy(res, buffer);
     return res;

@@ -123,7 +123,16 @@ int remove_by_value(Node **list, int val) {
 * list: pointer to pointer to Node
 */
 void reverse(Node **list) {
-    // FILL THIS IN!
+    Node *prev = NULL;
+    Node *curr = *list;
+    Node *next = curr->next;
+    while(curr != NULL){
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        *list = curr;
+        curr = next;
+    }
 }
 
 
@@ -159,7 +168,10 @@ int main() {
     push(list, 1);
     push(list, 0);
     print_list(list);
-
-    // reverse(list);
-    // print_list(list);
+    reverse(list);
+    print_list(list);
+    pop(list);
+    print_list(list);
+    reverse(list);
+    print_list(list);
 }

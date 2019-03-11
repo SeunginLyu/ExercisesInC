@@ -41,6 +41,13 @@ x, y: coordinates
 returns: new Line; use free_line to free
 */
 // TODO: Write this function
+Line* make_line(Point* x, Point* y){
+    Line* l = malloc(sizeof(Line));
+    l->start = x;
+    l->end = y;
+    return l;
+}
+
 
 /* Return string representation
 
@@ -99,18 +106,24 @@ Point *upper_right_rect(Rectangle *rect) {
     return p;
 }
 
-void main (int argc, char *argv[]) {
+int main (int argc, char *argv[]) {
     Point *lower_left = make_point(3.0, 4.0);
     Point *upper_right = make_point(5.0, 6.0);
 
     printf("%s\n", point_to_string(lower_left));
     printf("%s\n", point_to_string(upper_right));
 
-    Rectangle *rectangle = make_rectangle(lower_left, 2.0, 2.0);
-    printf("%s\n", rectangle_to_string(rectangle));
+    // Rectangle *rectangle = make_rectangle(lower_left, 2.0, 2.0);
+    // printf("%s\n", rectangle_to_string(rectangle));
 
-    Point *result = upper_right_rect(rectangle);
-    printf("%s\n", point_to_string(result));
+    // Point *result = upper_right_rect(rectangle);
+    // printf("%s\n", point_to_string(result));
 
-    assert(equal_point(result, upper_right));
+    Line *new_line = make_line(lower_left, upper_right);
+
+    // assert(equal_point(result, upper_right));
+    printf("%s\n", point_to_string(new_line->start));
+    printf("%s\n", point_to_string(new_line->end));
+
+    return 0;
 }

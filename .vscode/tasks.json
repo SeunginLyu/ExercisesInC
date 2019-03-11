@@ -9,6 +9,7 @@
             "command": "gcc",
             "args": [
                 "${file}",
+                "-Wall",
                 "-g",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}.out"

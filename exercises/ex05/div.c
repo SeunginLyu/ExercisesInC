@@ -26,11 +26,18 @@ uint32_t get_exponent(float x) {
 */
 float div_by_pow_2(float x, int n)
 {
-    // TODO: fill this in
-    return x;
+    b.f = x;
+    uint32_t sign = (b.i >> 31 & 1) << 31;
+    uint32_t expon = (get_exponent(x) - n) << 23;
+    uint32_t coef = b.i & ((1 << 23) - 1);
+    b.i = sign|expon|coef;
+    return b.f;
 }
 
-void main() {
+int main() {
     float y = div_by_pow_2(4.82, 1);
+    float z = div_by_pow_2(8.00, 2);
     printf("%f\n", y);
+    printf("%f\n", z);
+    return 0;
 }

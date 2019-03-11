@@ -24,3 +24,12 @@ time_rand.o: rand.h time_rand.c
 
 time_rand: rand.o time_rand.o
 	gcc -g -o time_rand.out rand.o time_rand.o
+
+shapes.o: shapes.h shapes.c
+	gcc -g -c -W shapes.c
+
+lines.o: shapes.h lines.c
+	gcc -g -c -W lines.c
+
+test_lines: shapes.o lines.o
+	gcc -g -o lines.out lines.o shapes.o

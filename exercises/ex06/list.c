@@ -115,7 +115,19 @@ int remove_by_value(Node **list, int val) {
     return 0;
 }
 
-
+int swap(Node **list){
+    Node *curr = *list;
+    if(curr->next == NULL || curr==NULL){
+        return -1;
+    }
+    Node *first = curr;
+    Node *second = curr->next;
+    Node *third = second ->next;
+    *list = second;
+    second->next = first;
+    first->next = third;
+    return 0;
+}
 /* Reverses the elements of the list.
 *
 * Does not allocate or free nodes.
@@ -163,10 +175,14 @@ int main() {
     remove_by_value(list, 2);
     print_list(list);
 
+   
+
     push(list, 3);
     push(list, 2);
     push(list, 1);
     push(list, 0);
+    print_list(list);
+     swap(list);
     print_list(list);
     reverse(list);
     print_list(list);

@@ -226,7 +226,9 @@ int equal_hashable(Hashable *h1, Hashable *h2)
     if(h1->hash == h2->hash){
         if(h1->key == h2->key){
             if(h1->equal == h2->equal){
-                return 1;
+                if(h1->equal(h1->key, h2->key) && h2->equal(h1->key, h2->key)){
+                    return 1;
+                }
             }
         }
     }
@@ -320,7 +322,7 @@ Value *list_lookup(Node *list, Hashable *key)
 {
     Node *curr = list;
     while(curr != NULL){
-        if(curr->key == key){
+        if(equal_hashable(curr->key, key)){
             return curr->value;
         }else{
             curr = curr->next;

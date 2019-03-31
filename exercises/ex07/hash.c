@@ -372,29 +372,16 @@ void print_map(Map *map)
 /* Adds a key-value pair to a map. */
 void map_add(Map *map, Hashable *key, Value *value)
 {
-    int i;
-    for (i=0; i<map->n; i++) {
-        if (map->lists[i] == NULL) {
-            map->lists[i] = make_node(key, value, NULL);
-            return;
-        }
-    }
+    int i = hash_hashable(key) % map->n;
+    map->lists[i] = prepend(key,value, map->lists[i]);
 }
 
 
 /* Looks up a key and returns the corresponding value, or NULL. */
 Value *map_lookup(Map *map, Hashable *key)
 {
-    Value *x;
-    int i;
-    for (i=0; i<map->n; i++) {
-        if (map->lists[i] != NULL) {
-            if((x = list_lookup(map->lists[i], key)) != NULL){
-                return x;
-            }
-        }
-    }
-    return NULL;
+    int i = hash_hashable(key) % map->n;
+    return list_lookup(map->lists[i], key);
 }
 
 
@@ -409,9 +396,9 @@ void print_lookup(Value *value)
 
 int main ()
 {
-    Hashable *hashable1 = make_hashable_int (1);
-    Hashable *hashable2 = make_hashable_string ("Apple");
-    Hashable *hashable3 = make_hashable_int (2);
+    Hashable *hashable1 = make_hashable_int (3);
+    Hashable *hashable2 = make_hashable_string ("Apples");
+    Hashable *hashable3 = make_hashable_int (4);
 
     // make a list by hand
     Value *value1 = make_int_value (17);

@@ -7,9 +7,19 @@ GHashTable* initCounter(gchar* contents){
     GHashTable* counter = g_hash_table_new(g_str_hash, g_str_equal);
     int i =0;
     while(split_contents[i] !='\0'){
-        char *pos;
         gchar* key = split_contents[i];
+        char *pos;
+        // remove newline character from key
         if ((pos=strchr(key, '\n')) != NULL) *pos = '\0';
+        
+        // remove punctuation from key
+        size_t pos1 = 0;
+        for (char *p = key; *p; ++p){
+            if (g_ascii_isalpha(*p)){
+                key[pos1++] = *p;
+            }
+        }
+        key[pos1] = '\0';
         gpointer v;
         gboolean exists = g_hash_table_lookup_extended(counter, key, NULL, &v);
         if(!exists){
@@ -32,16 +42,17 @@ void printCounter(GHashTable* counter){
     g_hash_table_foreach(counter, printKeyValue, NULL);
 }
 
+
 int main(int argc, char** argv) {
     if (argc != 2){
-        g_printf("[*] Usage: %s <file>\n", argv[0]);
+        g_error("[*] Usage: %s <file>\n", argv[0]);
         return -1;
     }
     gchar* file = argv[1];
 
     // check if file exists
     if (!g_file_test (file, G_FILE_TEST_EXISTS)) {
-        g_printf("File <%s> does not exist \n", argv[1]);
+        g_error("File <%s> does not exist \n", argv[1]);
         return -1;
     }
     g_printf("Word Count Target : %s\n", argv[1]);
@@ -55,6 +66,8 @@ int main(int argc, char** argv) {
         g_clear_error (&get_error);
         return -1;
     }
+    
+
     GHashTable* counter = initCounter(contents);
     printCounter(counter);
 

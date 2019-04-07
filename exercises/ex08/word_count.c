@@ -5,26 +5,28 @@
 GHashTable* initCounter(gchar* contents){
     gchar** split_contents = g_strsplit (contents, " ", -1);
     GHashTable* counter = g_hash_table_new(g_str_hash, g_str_equal);
-    int i;
-    for(i=0; i<sizeof(split_contents);i++){
+    int i =0;
+    while(split_contents[i] !='\0'){
+        char *pos;
         gchar* key = split_contents[i];
-        gpointer c = g_hash_table_lookup(counter, key);
-        gint* new_value = g_new(gint, GPOINTER_TO_INT(c)+1);
-        if(c == NULL){
-            g_printf("init %s : %i\n", key, 0);
-            g_hash_table_insert(counter, key, g_new(gint, 0));
-        }else{
-            g_printf("replace %s : %i\n", key, GPOINTER_TO_INT(new_value));
+        if ((pos=strchr(key, '\n')) != NULL) *pos = '\0';
+        gpointer v;
+        gboolean exists = g_hash_table_lookup_extended(counter, key, NULL, &v);
+        if(!exists){
+            // g_printf("init %s : %i\n", key, 1);
+            g_hash_table_insert(counter, key, GINT_TO_POINTER(1));
+        } else {
+            gpointer new_value = GINT_TO_POINTER(GPOINTER_TO_INT(v) + 1);
+            // g_printf("replace %s : %i\n", key, GPOINTER_TO_INT(new_value));
             g_hash_table_replace(counter, key, new_value);
         }
+        i++;
     }
-    
-    g_strfreev(split_contents);
     return counter;
 }
 void printKeyValue(gpointer key, gpointer value, gpointer userdata)
 {
-    // g_printf("%s : %i\n", key, GPOINTER_TO_INT(value));
+    g_printf("%s : %i\n", key, GPOINTER_TO_INT(value));
 }
 void printCounter(GHashTable* counter){
     g_hash_table_foreach(counter, printKeyValue, NULL);

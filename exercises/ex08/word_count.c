@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 
 
-void countWords(GHashTable* counter, FILE* target){
+void countWords(char* contents){
     
 }
 void printCounter(GHashTable* counter){
@@ -14,15 +15,26 @@ void printCounter(GHashTable* counter){
 int main(int argc, char** argv) {
 
     if (argc != 2){
-        printf("[*] Usage: %s <file>\n", argv[0]);
+        g_printf("[*] Usage: %s <file>\n", argv[0]);
         return -1;
     }
-    printf("Word Count Target : %s\n", argv[1]);
-    FILE* target = fopen(argv[1],"r");
+    char* file = argv[1];
+    if (!g_file_test (file, G_FILE_TEST_EXISTS)) {
+        g_printf("File <%s> does not exist \n", argv[1]);
+        return -1;
+    }
+    g_printf("Word Count Target : %s\n", argv[1]);
+    char* contents;
+    GError* get_error;
+    gboolean get_success = g_file_get_contents (file, &contents, NULL, &get_error);
+    if(!get_success){
+        g_error("%s \n", get_error->message);
+        g_clear_error (&get_error);
+        return -1;
+    }
     GHashTable* counter = g_hash_table_new(g_str_hash, g_str_equal);
-    countWords(counter, target);
+    countWords(contents);
     printCounter(counter);
-    fclose(target);
    
 
     // g_hash_table_insert(hash, "Virginia", "Richmond");

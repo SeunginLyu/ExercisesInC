@@ -396,9 +396,9 @@ void print_lookup(Value *value)
 
 int main ()
 {
-    Hashable *hashable1 = make_hashable_int (3);
+    Hashable *hashable1 = make_hashable_int (1);
     Hashable *hashable2 = make_hashable_string ("Apples");
-    Hashable *hashable3 = make_hashable_int (4);
+    Hashable *hashable3 = make_hashable_int (2);
 
     // make a list by hand
     Value *value1 = make_int_value (17);
@@ -423,6 +423,7 @@ int main ()
     Map *map = make_map(10);
     map_add(map, hashable1, value1);
     map_add(map, hashable2, value2);
+    map_add(map, hashable3, value2);
 
     printf ("Map\n");
     print_map(map);

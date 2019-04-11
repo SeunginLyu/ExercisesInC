@@ -12,7 +12,8 @@ License: MIT License https://opensource.org/licenses/MIT
 #include <errno.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <wait.h>
+#include <sys/wait.h>
+
 
 
 // errno is an external global variable that contains
@@ -29,18 +30,30 @@ double get_seconds() {
     return tv->tv_sec + tv->tv_usec / 1e6;
 }
 
-
-void child_code(int i)
-{
+int g = 0;
+void child_code(int i, int* h, int* s)
+{  
+    // variables g(global), h(heap), s(stack) show that child processes have their own address spaces
+    // this should accumulate to the sum of 0 to n if the processes share the address space
+    g = g + i;
+    *h = (*h) + i;
+    *s = (*s) + i;
     sleep(i);
     printf("Hello from child %d.\n", i);
+    printf("g=%i, h=%i, s=%i in child %i\n", g, *h, *s, i);
 }
+
+
+
 
 // main takes two parameters: argc is the number of command-line
 // arguments; argv is an array of strings containing the command
 // line arguments
 int main(int argc, char *argv[])
 {
+    int* h = malloc(sizeof(int));
+    *h = 0;
+    int s = 0;
     int status;
     pid_t pid;
     double start, stop;
@@ -72,7 +85,7 @@ int main(int argc, char *argv[])
 
         /* see if we're the parent or the child */
         if (pid == 0) {
-            child_code(i);
+            child_code(i, h, &s);
             exit(i);
         }
     }
@@ -96,6 +109,7 @@ int main(int argc, char *argv[])
     // compute the elapsed time
     stop = get_seconds();
     printf("Elapsed time = %f seconds.\n", stop - start);
+    printf("g=%i, h=%i, s=%i in parent\n", g, *h, s);
 
     exit(0);
 }

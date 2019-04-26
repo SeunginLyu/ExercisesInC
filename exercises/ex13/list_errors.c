@@ -150,6 +150,7 @@ int insert_by_index(Node **head, int val, int index) {
     int i;
     Node *node = *head;
 
+    // add an element to the beginning
     if (index == 0) {
         push(head, val);
         return 0;
@@ -171,13 +172,20 @@ Node *make_something() {
     Node *node2 = make_node(2, NULL);
     Node *node3 = make_node(3, NULL);
 
-    int val = pop(&node1);
-    push(&node2, val);
-    node3->next = node2;
+    int val = pop(&node1); // node 1 freed
+    push(&node2, val); // 1 -> 2
+    node3->next = node2; // 1 -> 2 <- 3
 
     return node3;
 }
-
+void free_something(Node **list){
+    Node *curr = *list;
+    while(curr != NULL){
+        Node* next = curr->next;
+        free(curr);
+        curr = next;
+    }
+}
 
 int main() {
     // make a list of even numbers
@@ -207,7 +215,10 @@ int main() {
     print_list(&empty);
 
     Node *something = make_something();
-    free(something);
+    free_something(&something);
+    
+    free_something(&test_list);
+    free_something(&empty);
 
     return 0;
 }

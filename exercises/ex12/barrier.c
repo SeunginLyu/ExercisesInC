@@ -18,6 +18,7 @@ License: GNU GPLv3
 typedef struct {
     int counter;
     Mutex *mutex;
+    Cond *part1_done;
 } Shared;
 
 /* Allocate the shared structure.
@@ -27,6 +28,7 @@ Shared *make_shared()
     Shared *shared = check_malloc(sizeof(Shared));
     shared->counter = 0;
     shared->mutex = make_mutex();
+    shared->part1_done = make_cond();
     return shared;
 }
 
@@ -44,13 +46,27 @@ void child_code(Shared *shared)
     // you can use; you may add one or more additional Mutex or Cond
     // objects.
 
+    // Solution 1 Using Cond
+    // printf("Child part 1\n");
+    // mutex_lock(shared->mutex);
+    // shared->counter++;
+    // while(shared->counter < NUM_CHILDREN){
+    //     cond_wait(shared->part1_done, shared->mutex);
+    // } 
+    // cond_signal(shared->part1_done);
+    // printf("Child part 2\n");
+    // mutex_unlock(shared->mutex);
+
+    // Solution 2 : Using Mutex Only
     printf("Child part 1\n");
+    mutex_lock(shared->mutex);
     shared->counter++;
-    while (shared->counter < NUM_CHILDREN) {
-        // do nothing
-        // Running this loop over and over is called busy waiting.
-    }
+    while(shared->counter < NUM_CHILDREN){
+        mutex_unlock(shared->mutex);
+        // pthread_exit("part1 not finished");
+    } 
     printf("Child part 2\n");
+    mutex_unlock(shared->mutex);
 }
 
 /* Entry point for the child threads.

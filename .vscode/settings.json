@@ -3,5 +3,6 @@
     "files.associations": {
         "string.h": "c"
     },
-    "python.linting.pylintEnabled": false
+    "python.linting.pylintEnabled": false,
+    "python.pythonPath": "usr/bin/python2.7"
 }

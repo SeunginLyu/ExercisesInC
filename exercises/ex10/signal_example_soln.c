@@ -88,5 +88,6 @@ int main(void) {
 	        end_game(0);
 	    }
     }
+    
     return 0;
 }

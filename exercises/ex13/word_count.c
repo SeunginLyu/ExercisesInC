@@ -74,7 +74,7 @@ void incr(GHashTable* hash, gchar *key)
         gint *val1 = g_new(gint, 1);
         gchar *dup_key = g_strdup(key);
         *val1 = 1;
-        g_hash_table_insert(hash, key, val1);
+        g_hash_table_insert(hash, dup_key, val1);
     } else {
         *val += 1;
     }
